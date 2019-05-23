@@ -4,12 +4,15 @@ const testArea = document.querySelector("#test-area");
 const originText = document.querySelector("#origin-text p").innerHTML;
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
+const currentErrors = document.querySelector(".err");
 
 // Global timer variable
 // Minutes, seconds, hundredths of seconds, thousandths of seconds
 var timer = [0,0,0,0];
 var interval;
 var timerRunning = false;
+
+var errors = 0;
 
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
@@ -47,14 +50,20 @@ function spellCheck () {
     let originTextMatch = originText.substring(0, textEntered.length);
 
 
+    // Change border to green if correct
     if (textEntered == originText) {
         clearInterval(interval);
         testWrapper.style.borderColor = "#66ff33";
     }else{
+        // Change to blue if everything so far is correct
         if (textEntered == originTextMatch) {
             testWrapper.style.borderColor = "#3366ff";
         } else {
+            // Change to orange if incorrect
+            // And increment the words per minute
             testWrapper.style.borderColor = "#cc6600";
+            errors += 1;
+            currentErrors.innerHTML = errors;
         }
     }
 }
@@ -73,14 +82,20 @@ function start () {
 
 // Reset everything:
 function reset () {
+    // Clear all currently held variables
     clearInterval(interval);
     interval = null;
     timer = [0,0,0,0];
     timerRunning = false;
+    errors = 0;
 
+
+    // Restet the HTML
     testArea.value = "";
     theTimer.innerHTML = "00:00:00";
     testWrapper.style.oorderColor = "grey";
+    currentErrors.innerHTML = "0";
+
 }
 
 // Event listeners for keyboard input and the reset button:
